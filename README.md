@@ -1,26 +1,22 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+## Herogotchi - Tamagotchi RPG
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
+To-do List :
 ```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
+ - Set Hangar
+ - Set and save player 1, 2 and 3 stats upon character creation (as arrays)
+   - Combat : VIT, ATK, DEF, SPD, Color, WEPS. Other : Hunger, Thirst, State, Diet Preferences, Hobbies and possibly more.
+ - Set and save Pet 1, 2 and 3 stats upon character creation (as arrays)
+   - Combat : VIT, ATK, DEF, SPD, Color, PROFS. Other : Hunger, Thirst, State, Diet Preferences, Hobbies and possibly more.
+ - Add template Pet abilities (as arrays). Ability name, Damage, Chance to trigger, Description.
+ - Make basic battle simulator, with BG, character placements and interval/timers for the turn based combat.
+   - Set up reward system for the end of the battle.
+     - Return to Hangar/Lobby after the battle.
+ 
 ```
 
-Then, to run it, cd into `myBlank` and run:
-
 ```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+git clone -b master https://github.com/Ninjavitus/Herogotchi.git
 ```
 
-Substitute ios for android if not on a Mac.
+iOS and Android probably.
 
