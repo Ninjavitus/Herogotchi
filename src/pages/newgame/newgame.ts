@@ -25,12 +25,13 @@ export class NewgamePage {
 
   // Assign a random Pet upon opening the pokeball. Add reveal animation in the future.
   randomPet() {
-      console.log("this park works.");
+      var petChance = Math.round(Math.random() * 100) + 1;
+      console.log(petChance);
   }
 
   // Sets the Pilot's gender and saves it. Then shows the sprite, then shows a clickable pokeball.
   setGender(sexe) {
-      document.getElementById("pilotures").innerHTML = '<img id="pilotSprite" src= "../assets/img/pilots/' + sexe + '.png" style= "width: 215px; height: 215px; padding-top: 15px" /><br><h1 id="whitetext"><font face="BebasNeue">Open your pokeball</font></h1><br><img id="pokeBall" src= "../assets/img/pokeball.png" style= "width: 115px; height: 115px" onclick="randomPet()" />';
+      document.getElementById("pilotures").innerHTML = '<img id="pilotSprite" src= "../assets/img/pilots/' + sexe + '.png" style= "width: 200px; height: 200px; padding-top: 15px" /><br><h1 id="whitetext"><font face="BebasNeue">Open your pokeball</font></h1><br><img id="pokeBall" src= "../assets/img/pokeball.png" style= "width: 115px; height: 115px" (click)="randomPet()" />';
   }
 
 }
