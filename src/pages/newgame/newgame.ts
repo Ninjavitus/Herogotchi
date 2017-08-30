@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { NewpetPage } from '../newpet/newpet';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -11,27 +12,97 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-newgame',
-  templateUrl: 'newgame.html'
+    selector: 'page-newgame',
+    templateUrl: 'newgame.html'
 })
 export class NewgamePage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) {
-  }
+    }
 
-  ionViewDidLoad() {
-    console.log('this is the starter page');
-  }
+    ionViewWillEnter() {
 
-  // Assign a random Pet upon opening the pokeball. Add reveal animation in the future.
-  randomPet() {
-      var petChance = Math.round(Math.random() * 100) + 1;
-      console.log(petChance);
-  }
+        this.storage.get('PlayerGameInfo').then((data) => {
 
-  // Sets the Pilot's gender and saves it. Then shows the sprite, then shows a clickable pokeball.
-  setGender(sexe) {
-      document.getElementById("pilotures").innerHTML = '<img id="pilotSprite" src= "../assets/img/pilots/' + sexe + '.png" style= "width: 200px; height: 200px; padding-top: 15px" /><br><h1 id="whitetext"><font face="BebasNeue">Open your pokeball</font></h1><br><img id="pokeBall" src= "../assets/img/pokeball.png" style= "width: 115px; height: 115px" (click)="randomPet()" />';
-  }
+            var gameInfo = JSON.parse(data);
+            var oldPlayerOne = gameInfo["Player1"]; // Check if he already has a player.
 
+            if (oldPlayerOne == "Yes") {
+                this.navCtrl.push(NewpetPage);
+            }
+
+        });
+    }
+
+    updateOldPlayerOne() {
+        this.storage.get('PlayerGameInfo').then((data) => {
+
+            var gameInfo = JSON.parse(data);
+            gameInfo["Player1"] = "Yes";
+
+            var gameInfoNew = JSON.stringify(gameInfo);
+
+            this.storage.set('PlayerGameInfo', gameInfoNew);
+
+        });
+    }
+
+    // Sets the Pilot's gender and saves it. Then shows the sprite, then shows a clickable pokeball.
+    setGenderOne(sexe) {
+
+        // Change displayed sprite. In the future, they'll get to choose what the base sprite is or get a random one.'
+        document.getElementById("pilotures").innerHTML = '<img id="pilotSprite" src= "../assets/img/pilots/' + sexe + '.png" style= "width: 200px; height: 200px; padding-top: 15px" /><br>';
+
+        // add button after they select a gender. Button changes based on gender. 1 for Male, 2 for Female
+        if (sexe == "M") {
+            // Give a new player their gender
+            this.storage.set('PlayerGender', "Male");
+        } else {
+            // Give a new player their gender
+            this.storage.set('PlayerGender', "Female");
+        }
+    }
+
+    playerNewStats() {
+        setTimeout(() => {
+                // Get stats
+                this.storage.get('PlayerOneStats').then((stats) => {
+
+                    //var player1 = JSON.parse(stats);
+                    this.updateOldPlayerOne();
+                    document.getElementById("nextError").innerText = "Success!";
+                });
+                this.navCtrl.push(NewpetPage);
+            }, 500);
+    }
+
+    petNextOne(pilotName) {
+
+        if (pilotName.length >= 4) {
+
+            var pilotUpper = pilotName.charAt(0).toUpperCase();
+            var pilotRest = pilotName.slice(1);
+            var pilot = pilotUpper + pilotRest;
+
+            // Get player gender
+            this.storage.get('PlayerGender').then((gender) => {
+
+                if (gender == "Male" || gender == "Female") {
+
+                    // Object containing all the player stats. Turned to string to save the values, then turned back to object
+                    var playerOne = { name: pilot, gender: "M", sprite: ".png", LVL: "1", curEXP: "0", maxEXP: "50", curVIT: "10", maxVIT: "10", ATK: "8", DEF: "6", SPD: "6", color: "red", WEPS: "none", curHUNGER: "8", maxHUNGER: "8", curTHIRST: "6", maxTHIRST: "6", status: "normal", likes: "steaks", dislikes: "shrooms", hobby: "napping" };
+
+                    // Give a new player their stats. Will be accessed later for it's values.
+                    this.storage.set('PlayerOneStats', JSON.stringify(playerOne));
+
+                    this.playerNewStats();
+
+                } else {
+                    document.getElementById("nextError").innerText = "You must select a gender.";
+                }
+            });
+        }else {
+            document.getElementById("nextError").innerText = "Your pilot's name must be 4 letters or longer.";
+        }
+    }
 }

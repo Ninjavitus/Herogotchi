@@ -8,12 +8,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { NewgamePage } from '../pages/newgame/newgame';
+import { NewpetPage } from '../pages/newpet/newpet';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    NewgamePage
+    NewgamePage,
+    NewpetPage
   ],
   imports: [
     BrowserModule,
@@ -24,7 +26,8 @@ import { NewgamePage } from '../pages/newgame/newgame';
   entryComponents: [
     MyApp,
     HomePage,
-    NewgamePage
+    NewgamePage,
+    NewpetPage
   ],
   providers: [
     StatusBar,
