@@ -10,6 +10,7 @@ import { HomePage } from '../pages/home/home';
 import { NewgamePage } from '../pages/newgame/newgame';
 import { NewpetPage } from '../pages/newpet/newpet';
 import { HangarPage } from '../pages/hangar/hangar';
+import { ViewpilotonePage } from '../pages/viewpilotone/viewpilotone';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HangarPage } from '../pages/hangar/hangar';
     HomePage,
     NewgamePage,
     NewpetPage,
-    HangarPage
+    HangarPage,
+    ViewpilotonePage
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { HangarPage } from '../pages/hangar/hangar';
     HomePage,
     NewgamePage,
     NewpetPage,
-    HangarPage
+    HangarPage,
+    ViewpilotonePage
   ],
   providers: [
     StatusBar,

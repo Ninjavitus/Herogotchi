@@ -1,6 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
+import { ViewpilotonePage } from '../viewpilotone/viewpilotone';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -62,7 +63,7 @@ export class HangarPage {
               });
              }
         });
-      }, 500);   
+      }, 200);   
   }
 
     // Reset player stats to null
@@ -75,6 +76,37 @@ export class HangarPage {
       this.storage.set('PilotOneStats', 'null'); // Resets player stats to null.
       this.storage.set('NewGame', null); // Yes if new to game, No if not, null if first time playing
       this.navCtrl.push(HomePage); // Switches the page to start the game.
+  }
+
+  viewPilot(num){
+  // Check if player has a Pilot1, 2 and 3
+  this.storage.get('PlayerGameInfo').then((data) => {
+
+      var gameInfo = JSON.parse(data);
+      var pilotNum = "Pilot" + num.toString();
+      var pilot = gameInfo[pilotNum]; 
+
+      // Check if player has a pilot in that slot. If no, send error message.
+      if (num == 1){
+        if(pilot == "Yes"){
+           this.navCtrl.push(ViewpilotonePage);
+          } else {
+          document.getElementById("petError").innerText = "You don't have a pilot in that slot.";
+          }
+      } else if (num == 2){
+        if(pilot == "Yes"){
+           //this.navCtrl.push(ViewpilottwoPage);
+          } else {
+          document.getElementById("petError").innerText = "You don't have a pilot in that slot.";
+          }
+      } else if (num == 3){
+        if(pilot == "Yes"){
+          // this.navCtrl.push(ViewpilotthreePage);
+          } else {
+          document.getElementById("petError").innerText = "You don't have a pilot in that slot.";
+          }
+      }
+    });
   }
 
   addNewPilot(slideNum) {
