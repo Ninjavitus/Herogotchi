@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+﻿import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -9,13 +9,15 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { NewgamePage } from '../pages/newgame/newgame';
 import { NewpetPage } from '../pages/newpet/newpet';
+import { HangarPage } from '../pages/hangar/hangar';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     NewgamePage,
-    NewpetPage
+    NewpetPage,
+    HangarPage
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { NewpetPage } from '../pages/newpet/newpet';
     MyApp,
     HomePage,
     NewgamePage,
-    NewpetPage
+    NewpetPage,
+    HangarPage
   ],
   providers: [
     StatusBar,

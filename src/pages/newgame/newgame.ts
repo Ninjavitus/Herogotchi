@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { NewpetPage } from '../newpet/newpet';
+import { HangarPage } from '../hangar/hangar';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -25,20 +26,20 @@ export class NewgamePage {
         this.storage.get('PlayerGameInfo').then((data) => {
 
             var gameInfo = JSON.parse(data);
-            var oldPlayerOne = gameInfo["Player1"]; // Check if he already has a player.
+            var oldPilotOne = gameInfo["Pilot1"]; // Check if he already has a pilot.
 
-            if (oldPlayerOne == "Yes") {
+            if (oldPilotOne == "Yes") {
                 this.navCtrl.push(NewpetPage);
             }
 
         });
     }
 
-    updateOldPlayerOne() {
+    updateOldPilotOne() {
         this.storage.get('PlayerGameInfo').then((data) => {
 
             var gameInfo = JSON.parse(data);
-            gameInfo["Player1"] = "Yes";
+            gameInfo["Pilot1"] = "Yes";
 
             var gameInfoNew = JSON.stringify(gameInfo);
 
@@ -56,20 +57,19 @@ export class NewgamePage {
         // add button after they select a gender. Button changes based on gender. 1 for Male, 2 for Female
         if (sexe == "M") {
             // Give a new player their gender
-            this.storage.set('PlayerGender', "Male");
+            this.storage.set('PlayerGender', "M");
         } else {
             // Give a new player their gender
-            this.storage.set('PlayerGender', "Female");
+            this.storage.set('PlayerGender', "F");
         }
     }
 
-    playerNewStats() {
+    pilotOneNewStats() {
         setTimeout(() => {
                 // Get stats
-                this.storage.get('PlayerOneStats').then((stats) => {
+                this.storage.get('PilotOneStats').then((stats) => {
 
-                    //var player1 = JSON.parse(stats);
-                    this.updateOldPlayerOne();
+                    this.updateOldPilotOne();
                     document.getElementById("nextError").innerText = "Success!";
                 });
                 this.navCtrl.push(NewpetPage);
@@ -85,17 +85,17 @@ export class NewgamePage {
             var pilot = pilotUpper + pilotRest;
 
             // Get player gender
-            this.storage.get('PlayerGender').then((gender) => {
+            this.storage.get('PlayerGender').then((genderPilot) => {
 
-                if (gender == "Male" || gender == "Female") {
+                if (genderPilot == "M" || genderPilot == "F") {
 
                     // Object containing all the player stats. Turned to string to save the values, then turned back to object
-                    var playerOne = { name: pilot, gender: "M", sprite: ".png", LVL: "1", curEXP: "0", maxEXP: "50", curVIT: "10", maxVIT: "10", ATK: "8", DEF: "6", SPD: "6", color: "red", WEPS: "none", curHUNGER: "8", maxHUNGER: "8", curTHIRST: "6", maxTHIRST: "6", status: "normal", likes: "steaks", dislikes: "shrooms", hobby: "napping" };
+                    var pilotOne = { name: pilot, gender: genderPilot, sprite: ".png", LVL: "1", curEXP: "0", maxEXP: "50", curVIT: "10", maxVIT: "10", ATK: "8", DEF: "6", SPD: "6", color: "red", WEPS: "none", curHUNGER: "8", maxHUNGER: "8", curTHIRST: "6", maxTHIRST: "6", status: "normal", likes: "steaks", dislikes: "shrooms", hobby: "napping" };
 
                     // Give a new player their stats. Will be accessed later for it's values.
-                    this.storage.set('PlayerOneStats', JSON.stringify(playerOne));
+                    this.storage.set('PilotOneStats', JSON.stringify(pilotOne));
 
-                    this.playerNewStats();
+                    this.pilotOneNewStats();
 
                 } else {
                     document.getElementById("nextError").innerText = "You must select a gender.";

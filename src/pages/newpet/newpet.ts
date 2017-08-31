@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
+import { HangarPage } from '../hangar/hangar';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -24,8 +25,12 @@ export class NewpetPage {
 
         this.storage.get('PlayerGameInfo').then((data) => {
 
-            //var gameInfo = JSON.parse(data);
-           // var oldPetOne = gameInfo["Pet1"]; // Check if he already has a pet in slow 1. Used later
+            var gameInfo = JSON.parse(data);
+            var oldPetOne = gameInfo["Pet1"]; // Check if he already has a player.
+
+            if (oldPetOne == "Yes") {
+                this.navCtrl.push(HangarPage);
+            }
 
         });
     }
@@ -35,11 +40,11 @@ export class NewpetPage {
 
             var gameInfo = JSON.parse(data);
             gameInfo["Pet1"] = "Yes";
-            gameInfo["NewGame"] = "No";
 
             var gameInfoNew = JSON.stringify(gameInfo);
 
             this.storage.set('PlayerGameInfo', gameInfoNew);
+            this.storage.set('NewGame', 'No');
 
         });
     }
@@ -80,11 +85,10 @@ export class NewpetPage {
             // Get stats
             this.storage.get('PetOneStats').then((stats) => {
 
-                //var player1 = JSON.parse(stats);
                 this.updateOldPetOne();
                 document.getElementById("petError").innerText = "Success!";
             });
-            this.navCtrl.push(HomePage);
+            this.navCtrl.push(HangarPage);
         }, 500);
     }
 

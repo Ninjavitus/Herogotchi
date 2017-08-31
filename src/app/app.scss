@@ -1,4 +1,4 @@
-// http://ionicframework.com/docs/theming/
+﻿// http://ionicframework.com/docs/theming/
 
 
 // App Global Sass
@@ -27,10 +27,14 @@
 .maincontent {
   background-image: url('/assets/img/bg.gif');
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #resetbutton {
-  margin-top: 20%;
+  vertical-align: middle;
+  width: 120px;
+  margin-top: 90%;
+  box-shadow: 1px 1px 5px #888888;
 }
 
 #pilotSelectbg {
@@ -74,4 +78,21 @@
 #petError {
   color: #ff6a00;
   font-size: 10px;
+}
+
+#buttondiv {
+  width:100%;
+}
+
+.mainhangar {
+  background-image: url('/assets/img/hangar/bg.gif');
+  background-repeat: repeat-x;
+  background-size: cover;
+}
+
+#pilotNew {
+width:auto;
+height:auto;
+max-height:100%;
+max-width:100%;
 }
