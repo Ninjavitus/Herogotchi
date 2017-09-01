@@ -1,6 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\pages",
+    "\\src\\pages\\hangar",
+    "\\src\\pages\\home",
+    "\\src\\pages\\newgame",
+    "\\src\\pages\\newpet",
+    "\\src\\pages\\viewpilotone"
   ],
+  "SelectedNode": "\\src\\pages\\newgame\\newgame.html",
   "PreviewInSolutionExplorer": false
 }

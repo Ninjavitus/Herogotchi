@@ -1,7 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { NewgamePage } from '../newgame/newgame';
-import { NewpetPage } from '../newpet/newpet';
 import { HangarPage } from '../hangar/hangar';
 import { NavController } from 'ionic-angular';
 
@@ -17,7 +16,7 @@ export class HomePage {
 
   // Reset player NewToGame to null
   startGame() {
-      var gameInitSetup = { Pilot1: "No", Pilot2: "No", Pilot3: "No", PilotChange: "", Pet1: "No", Pet2: "No", Pet3: "No", PetChange: "" }
+      var gameInitSetup = { Time: this.updateTime(), curEnergy: "8", maxEnergy: "8", Pilot1: "No", Pilot2: "No", Pilot3: "No", PilotChange: "", Pet1: "No", Pet2: "No", Pet3: "No", PetChange: "" }
 
       var gameInfo = JSON.stringify(gameInitSetup);
 
@@ -40,16 +39,23 @@ export class HomePage {
             // If he already has a character, it will automatically send him to pet creation.
               this.navCtrl.push(NewgamePage);
           } else {
-            // If not null, then he already has an account. Send him to hangar. 
-              this.navCtrl.push(HangarPage);          
+            // If not null, then he already has an account. Send him to hangar.
+             this.navCtrl.push(HangarPage);      
           }
           
       });
   }
 
-  // Checks if the player is about to leave the page.
-  ionViewDidLeave() {
-  }
+  updateTime(){
+    //EST
+    var offset = -4.0
+
+    // UTC Time. Resets day at 8 PM EST instead of midnight.
+    var clientDate = new Date();
+    var currentDay = clientDate.getUTCMonth().toString() + " " + clientDate.getUTCDate().toString() + " " + clientDate.getUTCHours().toString(); 
+
+    return currentDay;
+   }
 
   // Checks if the player has opened the app and/or made an account before.
   checkIfNewToGame() {

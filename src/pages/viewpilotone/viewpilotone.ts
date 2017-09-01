@@ -20,6 +20,63 @@ export class ViewpilotonePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: Storage) {
   }
 
+  updateTime(){
+    // UTC Time. Resets day at 8 PM EST instead of midnight.
+    var clientDate = new Date();
+    var currentDay = clientDate.getUTCMonth().toString() + " " + clientDate.getUTCDate().toString() + " " + clientDate.getUTCHours().toString(); 
+
+    return currentDay;
+   }
+
+   // Global energy for now
+   updateEnergy(gameInfo){
+      // Create an array with the last saved player date
+      var oldDate = gameInfo["Time"].split(" ");
+      var serverDate = this.updateTime();
+
+      // Create an array with the current server time
+      var currentDate = serverDate.split(" ");
+
+      /*
+      0 - Month (0 to 11)
+      1 - Date Number (1 to 31)
+      2 - Hour (0 to 23)
+      */
+    
+    //1. Check if the current month is greater than the old month. If yes, update automatically.
+    //2. Check if current date is more recent. If yes, update automatically.
+    //3. if current Hour is greater than last saved Hour, then an hour has passed. Update energy.
+    if (currentDate[0] > oldDate[0]){
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New month.");
+
+    } else if (currentDate[1] > oldDate[1]){ 
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New day.");
+
+      } else if (currentDate[2] > oldDate[2]){
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New hour.");
+
+      } 
+   }
+
+  switchToHangar() {
+    this.navCtrl.push(HangarPage);
+  }
+
   ionViewDidLoad() {
   setTimeout(() => {
   // Open pilot1 stats to get name and stuff
@@ -65,27 +122,43 @@ export class ViewpilotonePage {
   var pilotATK = '<p id="pilotPageStats"><font color="#FFCC00"><b>ATK</b>&nbsp;&nbsp;&nbsp;</font>' + pilot["ATK"] + '</p><br>';
   var pilotDEF = '<p id="pilotPageStats"><font color="#00cd00"><b>DEF</b>&nbsp;&nbsp;&nbsp;</font>' + pilot["DEF"] + '</p><br>';
   var pilotSPD = '<p id="pilotPageStats"><font color="#007FFF"><b>SPD</b>&nbsp;&nbsp;&nbsp;</font>' + pilot["SPD"] + '</p><br>';
+  var pilotLVL = '<p id="pilotPageStats"><b>LEVEL</b>&nbsp;&nbsp;' + pilot["LVL"] + '</p><br>';
+  //var pilotEnergy = '<br><p id="pilotPageStats">' + pilot["LVL"] + '</p><br>';
 
   // Set pilot likes/dislikes & hobbies
-  var pilotLikes = '<p id="pilotPageRight">' + pilot["likes"] + '</p><br>';
+  var pilotHunger = '<p id="pilotPageRight">' + pilot["curHUNGER"] + ' / ' + pilot["maxHUNGER"] + '</p><br>';
+  var pilotThirst = '<p id="pilotPageRight">' + pilot["curTHIRST"] + ' / ' + pilot["maxTHIRST"] + '</p><br>'; // Used as Energy for now
+  var pilotLikes = '<br><p id="pilotPageRight">' + pilot["likes"] + '</p><br>';
   var pilotDislikes = '<p id="pilotPageRight">' + pilot["dislikes"] + '</p><br>'; 
+  var pilotHobby = '<p id="pilotPageRight">' + pilot["hobby"] + '</p><br>'; 
 
-  var pilotHobby = '<br><p id="pilotPageRight">' + pilot["hobby"] + '</p><br>'; 
-
+  //Player name and level
   document.getElementById("whitetext").innerText = pilotName;
 
   // Set player stats on page
-  document.getElementById("pilotStatsDiv").innerHTML = pilotVIT + pilotATK + pilotDEF + pilotSPD;
-  document.getElementById("pilotRightStatsDiv").innerHTML = pilotLikes + pilotDislikes + pilotHobby;
+  document.getElementById("pilotStatsDiv").innerHTML = pilotLVL + pilotVIT + pilotATK + pilotDEF + pilotSPD;
+  document.getElementById("pilotRightStatsDiv").innerHTML = pilotHunger + pilotThirst + pilotLikes + pilotDislikes + pilotHobby;
 
   // Adjust div width based on EXP %
-  document.getElementById("expDiv").innerHTML = '<div id="experienceBar" style="text-align:center; width:30%;"></div><p id="exptxt" style="font-size:10px; color:#FFFFFF; text-align:center;">' + pilotEXPValue + '&nbsp;&nbsp;( 10% )</p>';
+  document.getElementById("expDiv").innerHTML = '<div id="experienceBar" style="text-align:center; width:' + pilotEXPercent + ';"></div><p id="exptxt" style="font-size:10px; color:#FFFFFF; text-align:center;">' + pilotEXPValue + '&nbsp;&nbsp;(' + pilotEXPercent + ')</p>';
+
+  // Set player color and weapon type
+  document.getElementById("pilotColor").innerHTML = '<img id="colorBadge" src="../assets/img/combat/' + pilot["color"] + '.png" style="width: 64px; height: 64px;"/>';
 
   // Set pilot's image
-  //var pilotImage = document.getElementById("pilotSprite") as HTMLImageElement;
-  //pilotImage.src = '../assets/img/hangar/'+ pilot["gender"] + '.png';
+  var pilotImage = document.getElementById("pilotSprite") as HTMLImageElement;
+  pilotImage.src = '../assets/img/hangar/'+ pilot["gender"] + '.png';
 
     });
-  }, 200);   
+  }, 400);   
  }
+
+ionViewWillLeave() {
+  this.storage.get('PlayerGameInfo').then((data) => {
+
+     var gameInfo = JSON.parse(data);
+     this.updateEnergy(gameInfo);
+ });
+}
+
 }

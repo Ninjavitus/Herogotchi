@@ -62,11 +62,80 @@ export class HangarPage {
              document.getElementById("viewName3").innerText = "VIEW "+ pilotName3;
               });
              }
+              this.updateEnergy(gameInfo);
         });
       }, 200);   
   }
 
-    // Reset player stats to null
+  statGame() {
+      // Player stats
+      var pilotOne = { name: "Nickolas", gender: "M", sprite: ".png", LVL: "1", curEXP: "22", maxEXP: "25", curVIT: "10", maxVIT: "10", ATK: "8", DEF: "6", SPD: "6", color: "red", WEPS: "none", curHUNGER: "8", maxHUNGER: "8", curTHIRST: "6", maxTHIRST: "6", status: "normal", likes: "steaks", dislikes: "shrooms", hobby: "napping" };
+
+     // Give a new player their stats. Will be accessed later for it's values.
+      this.storage.set('PilotOneStats', JSON.stringify(pilotOne));
+
+      var gameInitSetup = { Time: this.updateTime(), curEnergy: "8", maxEnergy: "8", Pilot1: "Yes", Pilot2: "No", Pilot3: "No", PilotChange: "", Pet1: "Yes", Pet2: "No", Pet3: "No", PetChange: "" }
+
+      var gameInfo = JSON.stringify(gameInitSetup);
+
+      //Update stats
+      this.storage.set('PlayerGameInfo', gameInfo);
+  }
+
+  updateTime(){
+    // UTC Time. Resets day at 8 PM EST instead of midnight.
+    var clientDate = new Date();
+    var currentDay = clientDate.getUTCMonth().toString() + " " + clientDate.getUTCDate().toString() + " " + clientDate.getUTCHours().toString(); 
+
+    return currentDay;
+   }
+
+   // Global energy for now
+   updateEnergy(gameInfo){
+      // Create an array with the last saved player date
+      var oldDate = gameInfo["Time"].split(" ");
+      var serverDate = this.updateTime();
+
+      // Create an array with the current server time
+      var currentDate = serverDate.split(" ");
+
+      /*
+      0 - Month (0 to 11)
+      1 - Date Number (1 to 31)
+      2 - Hour (0 to 23)
+      */
+    
+    //1. Check if the current month is greater than the old month. If yes, update automatically.
+    //2. Check if current date is more recent. If yes, update automatically.
+    //3. if current Hour is greater than last saved Hour, then an hour has passed. Update energy.
+    if (currentDate[0] > oldDate[0]){
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New month.");
+
+    } else if (currentDate[1] > oldDate[1]){ 
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New day.");
+
+      } else if (currentDate[2] > oldDate[2]){
+
+      // Update energy & time
+      gameInfo["curEnergy"] = gameInfo["maxEnergy"];
+      gameInfo["Time"] = serverDate;
+      this.storage.set('PlayerGameInfo', JSON.stringify(gameInfo));
+      console.log("Energy updated. New hour.");
+
+      } 
+   }
+
+  // Reset player stats to null
   resetGame() {
       var gameInitSetup = { Player1: "No", Player2: "No", Player3: "No", PlayerChange: "", Pet1: "No", Pet2: "No", Pet3: "No", PetChange: "" }
 
@@ -113,5 +182,13 @@ export class HangarPage {
   var buttonID = "viewName" + slideNum;
       document.getElementById(buttonID).innerText = "VIEW "+ slideNum;
   }
+
+ionViewWillLeave() {
+  this.storage.get('PlayerGameInfo').then((data) => {
+
+     var gameInfo = JSON.parse(data);
+     this.updateEnergy(gameInfo);
+ });
+}
 
 }
